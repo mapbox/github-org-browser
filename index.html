@@ -5,7 +5,22 @@
     <link href='https://www.mapbox.com/base/latest/base.css' rel='stylesheet' />
     <link rel="stylesheet" type="text/css" href="index.css">
 </head>
-<body class="loading">
+<body>
+<div class="clearfix pad1">
+    <h2 class="fl mr">GitHub Org Browser</h2>
+    <div class="fl mr">
+        <form id="org-form">
+            <input type="text" id="org" value="" placeholder="Organization..." />
+            <input type="submit" value="Load" name="load" />
+        </form>
+    </div>
+    <div class="fl mr">
+        <fieldset class='with-icon'>
+            <span class="icon search"></span>
+            <input type="text" id="search" value="" placeholder="Filter..." />
+        </fieldset>
+    </div>
+</div>
 <table id="repos">
     <thead class="fill-blue-light dark">
         <tr>
@@ -17,11 +32,6 @@
             <th>Created</th>
             <th>Updated</th>
             <th>Description</th>
-            <!-- <th>Forks</th>
-            <th>Issues</th>
-            <th>PRs</th>
-            <th>Created</th>
-            <th>Updated</th> -->
         </tr>
     </thead>
 </table>

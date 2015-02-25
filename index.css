@@ -23,7 +23,9 @@ table td:nth-child(6),
 table td:nth-child(7) {
     white-space: nowrap;
 }
-
+.mr {
+    margin-right: 20px;
+}
 th.sort-header {
     cursor: pointer;
     -webkit-touch-callout: none;

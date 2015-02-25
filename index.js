@@ -1,7 +1,5 @@
 'use strict';
 
-var org = 'Mapbox';
-
 var reposTable = document.getElementById('repos');
 
 var tbody = document.createElement('tbody');
@@ -9,7 +7,33 @@ reposTable.appendChild(tbody);
 
 var tablesort;
 
-getRepos('https://api.github.com/orgs/' + org + '/repos?type=public&per_page=100');
+var searchInput = document.getElementById('search');
+
+searchInput.oninput = debounce(function (e) {
+    var rows = tbody.getElementsByTagName('tr'),
+        value = searchInput.value;
+
+    for (var i = 0, len = rows.length; i < len; i++) {
+        rows[i].style.display =
+            !value || rows[i].innerText.toLowerCase().indexOf(value.toLowerCase()) >= 0 ? 'table-row' : 'none';
+    }
+}, 150);
+
+var orgInput = document.getElementById('org'),
+    orgForm = document.getElementById('org-form');
+
+orgForm.onsubmit = loadFromInput;
+
+function loadFromInput() {
+    loadOrganization(orgInput.value);
+    return false;
+}
+
+function loadOrganization(org) {
+    tbody.innerHTML = '';
+    document.body.className = 'loading';
+    getRepos('https://api.github.com/orgs/' + org + '/repos?type=public&per_page=100');
+}
 
 function getRepos(url) {
     var xhr = new XMLHttpRequest();
@@ -20,7 +44,12 @@ function getRepos(url) {
 }
 
 function onResponse(e) {
+
     var xhr = e.target;
+    if (xhr.response.message === 'Not Found') {
+        document.body.className = '';
+        return;
+    }
 
     addRepos(xhr.response);
 
@@ -83,4 +112,21 @@ function addRow(cells) {
 
 function notFork(repo) {
     return !repo.fork;
+}
+
+function debounce(fn, wait) {
+    var timeout;
+
+    return function() {
+        var context = this,
+            args = arguments;
+
+        var later = function() {
+            timeout = null;
+            fn.apply(context, args);
+        };
+
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+    };
 }
