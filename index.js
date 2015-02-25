@@ -1,5 +1,7 @@
 'use strict';
 
+var org = 'Mapbox';
+
 var reposTable = document.getElementById('repos');
 
 var tbody = document.createElement('tbody');
@@ -7,7 +9,7 @@ reposTable.appendChild(tbody);
 
 var tablesort;
 
-getRepos('https://api.github.com/orgs/Mapbox/repos?type=public&per_page=100');
+getRepos('https://api.github.com/orgs/' + org + '/repos?type=public&per_page=100');
 
 function getRepos(url) {
     var xhr = new XMLHttpRequest();
@@ -23,12 +25,14 @@ function onResponse(e) {
     addRepos(xhr.response);
 
     var links = getLinks(xhr.getResponseHeader('Link'));
-    if (links.next) getRepos(links.next);
+    if (links && links.next) getRepos(links.next);
 
     document.body.className = 'loaded';
 }
 
 function getLinks(header) {
+    if (!header) return;
+
     var parts = header.split(','),
         links = {};
 

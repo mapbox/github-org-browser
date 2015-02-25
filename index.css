@@ -16,6 +16,7 @@ table th {
     border-bottom: none;
     border-color: #37A5C0;
     white-space: nowrap;
+    padding-right: 5px;
 }
 table td:nth-child(2),
 table td:nth-child(6),
