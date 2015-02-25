@@ -1,6 +1,4 @@
 
-var repos = [];
-
 function getRepos(url) {
     var xhr = new XMLHttpRequest();
     xhr.responseType = 'json';
@@ -11,12 +9,13 @@ function getRepos(url) {
 
 function onResponse(e) {
     var xhr = e.target;
-    repos = repos.concat(xhr.response);
+
+    addRepos(xhr.response);
 
     var links = getLinks(xhr.getResponseHeader('Link'));
-
     if (links.next) getRepos(links.next);
-    else done();
+
+    document.body.className = 'loaded';
 }
 
 function getLinks(header) {
@@ -34,14 +33,15 @@ function getLinks(header) {
 
 getRepos('https://api.github.com/orgs/Mapbox/repos?type=public&per_page=100');
 
-function done() {
-    document.body.className = 'loaded';
+var reposTable = document.getElementById('repos');
+var tbody = document.createElement('tbody');
+reposTable.appendChild(tbody);
 
-    var reposTable = document.getElementById('repos');
+var tablesort;
+
+function addRepos(repos) {
 
     repos = repos.filter(notFork);
-
-    var tbody = document.createElement('tbody');
 
     for (var i = 0; i < repos.length; i++) {
         var tr = document.createElement('tr');
@@ -55,9 +55,9 @@ function done() {
         addCell(tr, repos[i].description);
         tbody.appendChild(tr);
     }
-    reposTable.appendChild(tbody);
 
-    var tablesort = new Tablesort(reposTable, {descending: true});
+    if (!tablesort) tablesort = new Tablesort(reposTable, {descending: true});
+    else tablesort.refresh();
 }
 
 function formatDate(str) {
