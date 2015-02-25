@@ -76,7 +76,7 @@ function getLinks(header) {
 
 function addRepos(repos) {
 
-    repos = repos.filter(notFork);
+    // repos = repos.filter(notFork);
 
     for (var i = 0; i < repos.length; i++) {
         var repo = repos[i];
@@ -110,9 +110,9 @@ function addRow(cells) {
     tbody.appendChild(tr);
 }
 
-function notFork(repo) {
-    return !repo.fork;
-}
+// function notFork(repo) {
+//     return !repo.fork;
+// }
 
 function debounce(fn, wait) {
     var timeout;
