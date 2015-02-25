@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Mapbox Open Repositories</title>
+    <style>
+        body {
+            font: 14px/1.5 "Helvetica Neue", Arial, Helvetica, sans-serif;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        table {
+            border-collapse: collapse;
+            border-spacing: 0;
+        }
+        table th, table td {
+            text-align: left;
+            padding: 7px 10px 5px;
+            border-bottom: 1px solid #eee;
+            border-right: 1px solid #eee;
+        }
+        table th {
+            background: #eee;
+            border-color: #ddd;
+            white-space: nowrap;
+        }
+        table td:nth-child(2),
+        table td:nth-child(6),
+        table td:nth-child(7) {
+            white-space: nowrap;
+        }
+
+        th.sort-header {
+            cursor: pointer;
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -khtml-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+        table th.sort-header:after {
+            content: '';
+            display: inline-block;
+            margin-left: 5px;
+            margin-bottom: 2px;
+            border-width: 0 4px 4px;
+            border-style: solid;
+            border-color: #404040 transparent;
+            visibility: hidden;
+        }
+        table th.sort-header:hover:after {
+            visibility: visible;
+        }
+        table th.sort-up:after,
+        table th.sort-down:after,
+        table th.sort-down:hover:after {
+            visibility: visible;
+            opacity: 0.4;
+        }
+        table th.sort-up:after {
+            border-bottom: none;
+            border-width: 4px 4px 0;
+        }
+    </style>
+</head>
+<body>
+
+<table id="repos">
+    <thead>
+        <tr>
+            <th>Repository</th>
+            <th>Language</th>
+            <th class="table-sort-default">Stars</th>
+            <th>Forks</th>
+            <th>Issues</th>
+            <th>Created</th>
+            <th>Updated</th>
+            <th>Description</th>
+            <!-- <th>Forks</th>
+            <th>Issues</th>
+            <th>PRs</th>
+            <th>Created</th>
+            <th>Updated</th> -->
+        </tr>
+    </thead>
+</table>
+
+<script src='lib/tablesort.min.js'></script>
+<script src='lib/tablesort.numeric.js'></script>
+<script src='lib/tablesort.date.js'></script>
+
+<script src="repos.js"></script>
+<script src="index.js"></script>
+</body>
+</html>
