@@ -1,3 +1,13 @@
+'use strict';
+
+var reposTable = document.getElementById('repos');
+
+var tbody = document.createElement('tbody');
+reposTable.appendChild(tbody);
+
+var tablesort;
+
+getRepos('https://api.github.com/orgs/Mapbox/repos?type=public&per_page=100');
 
 function getRepos(url) {
     var xhr = new XMLHttpRequest();
@@ -24,36 +34,29 @@ function getLinks(header) {
 
     for (var i = 0; i < parts.length; i++) {
         var section = parts[i].split(';'),
-            url = section[0].match(/<(.*)>/)[1];
+            url = section[0].match(/<(.*)>/)[1],
             name = section[1].match(/rel="(.*)"/)[1];
         links[name] = url;
     }
     return links;
 }
 
-getRepos('https://api.github.com/orgs/Mapbox/repos?type=public&per_page=100');
-
-var reposTable = document.getElementById('repos');
-var tbody = document.createElement('tbody');
-reposTable.appendChild(tbody);
-
-var tablesort;
-
 function addRepos(repos) {
 
     repos = repos.filter(notFork);
 
     for (var i = 0; i < repos.length; i++) {
-        var tr = document.createElement('tr');
-        addCell(tr, repos[i].name);
-        addCell(tr, repos[i].language);
-        addCell(tr, repos[i].stargazers_count);
-        addCell(tr, repos[i].forks_count);
-        addCell(tr, repos[i].open_issues_count);
-        addCell(tr, formatDate(repos[i].created_at));
-        addCell(tr, formatDate(repos[i].pushed_at));
-        addCell(tr, repos[i].description);
-        tbody.appendChild(tr);
+        var repo = repos[i];
+        addRow([
+            '<a href="' + repo.html_url + '" target="_blank">' + repo.name + '</a>',
+            repo.language,
+            repo.stargazers_count,
+            repo.forks_count,
+            repo.open_issues_count,
+            formatDate(repo.created_at),
+            formatDate(repo.pushed_at),
+            repo.description
+        ]);
     }
 
     if (!tablesort) tablesort = new Tablesort(reposTable, {descending: true});
@@ -64,10 +67,14 @@ function formatDate(str) {
     return new Date(str).toDateString().substr(4);
 }
 
-function addCell(tr, html) {
-    var td = document.createElement('td');
-    td.innerHTML = html;
-    tr.appendChild(td);
+function addRow(cells) {
+    var tr = document.createElement('tr');
+    for (var i = 0; i < cells.length; i++) {
+        var td = document.createElement('td');
+        td.innerHTML = cells[i];
+        tr.appendChild(td);
+    }
+    tbody.appendChild(tr);
 }
 
 function notFork(repo) {

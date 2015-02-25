@@ -9,9 +9,12 @@ table {
 table th, table td {
     text-align: left;
     padding: 5px 10px;
+    border-right: 1px solid #eee;
+    border-bottom: 1px solid #eee;
 }
 table th {
     border-bottom: none;
+    border-color: #37A5C0;
     white-space: nowrap;
 }
 table td:nth-child(2),
