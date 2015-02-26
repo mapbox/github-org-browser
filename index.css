@@ -5,6 +5,7 @@ body {
 table {
     border-collapse: collapse;
     border-spacing: 0;
+    background: white;
 }
 table th, table td {
     text-align: left;
@@ -23,8 +24,26 @@ table td:nth-child(6),
 table td:nth-child(7) {
     white-space: nowrap;
 }
+input[type=text] {
+    border-color: #ccc;
+}
+input[type=text]:focus {
+    border-color: #999;
+}
 .mr {
     margin-right: 20px;
+}
+.header {
+    background: white;
+}
+.loaded .header {
+    border: none;
+}
+.gh-buttons {
+    margin-top: 4px;
+}
+body {
+    background: #ddd;
 }
 th.sort-header {
     cursor: pointer;
