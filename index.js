@@ -17,7 +17,7 @@ var update = debounce(function (e) {
     for (var i = 0, len = rows.length; i < len; i++) {
         rows[i].style.display =
             (!rows[i].dataset.fork || forkCheckbox.checked) &&
-            (!value || rows[i].innerText.toLowerCase().indexOf(value.toLowerCase())) >= 0 ? 'table-row' : 'none';
+            (!value || rows[i].textContent.toLowerCase().indexOf(value.toLowerCase())) >= 0 ? 'table-row' : 'none';
     }
 }, 150);
 
@@ -42,10 +42,10 @@ function loadOrganization(org) {
 
 function getRepos(url) {
     var xhr = new XMLHttpRequest();
-    xhr.responseType = 'json';
     xhr.onload = onResponse;
     xhr.open('get', url, true);
     xhr.send();
+    xhr.responseType = 'json';
 }
 
 function onResponse(e) {
