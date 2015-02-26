@@ -78,12 +78,12 @@ table th.sort-up:after {
     border-width: 4px 4px 0;
 }
 
-#repos {
-    display: none;
-}
-.loaded #loading {
+#repos, .filters {
     display: none;
 }
 .loaded #repos {
     display: table;
+}
+.loaded .filters {
+    display: block;
 }
