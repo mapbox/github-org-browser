@@ -8,16 +8,21 @@ reposTable.appendChild(tbody);
 var tablesort;
 
 var searchInput = document.getElementById('search');
+var forkCheckbox = document.getElementById('include-forks');
 
-searchInput.oninput = debounce(function (e) {
+var update = debounce(function (e) {
     var rows = tbody.getElementsByTagName('tr'),
         value = searchInput.value;
 
     for (var i = 0, len = rows.length; i < len; i++) {
         rows[i].style.display =
-            !value || rows[i].innerText.toLowerCase().indexOf(value.toLowerCase()) >= 0 ? 'table-row' : 'none';
+            (!rows[i].dataset.fork || forkCheckbox.checked) &&
+            (!value || rows[i].innerText.toLowerCase().indexOf(value.toLowerCase())) >= 0 ? 'table-row' : 'none';
     }
 }, 150);
+
+searchInput.oninput = update;
+forkCheckbox.onclick = update;
 
 var orgInput = document.getElementById('org'),
     orgForm = document.getElementById('org-form');
@@ -60,7 +65,7 @@ function onResponse(e) {
 }
 
 function getLinks(header) {
-    if (!header) return;
+    if (!header) return null;
 
     var parts = header.split(','),
         links = {};
@@ -76,8 +81,6 @@ function getLinks(header) {
 
 function addRepos(repos) {
 
-    // repos = repos.filter(notFork);
-
     for (var i = 0; i < repos.length; i++) {
         var repo = repos[i];
         addRow([
@@ -89,7 +92,7 @@ function addRepos(repos) {
             formatDate(repo.created_at),
             formatDate(repo.pushed_at),
             repo.description
-        ]);
+        ], repo);
     }
 
     if (!tablesort) tablesort = new Tablesort(reposTable, {descending: true});
@@ -100,8 +103,9 @@ function formatDate(str) {
     return new Date(str).toDateString().substr(4);
 }
 
-function addRow(cells) {
+function addRow(cells, repo) {
     var tr = document.createElement('tr');
+    if (repo.fork) tr.dataset.fork = true;
     for (var i = 0; i < cells.length; i++) {
         var td = document.createElement('td');
         td.innerHTML = cells[i];
@@ -109,10 +113,6 @@ function addRow(cells) {
     }
     tbody.appendChild(tr);
 }
-
-// function notFork(repo) {
-//     return !repo.fork;
-// }
 
 function debounce(fn, wait) {
     var timeout;
