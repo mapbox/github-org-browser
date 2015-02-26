@@ -88,9 +88,9 @@ function addRepos(repos) {
 
     for (var i = 0; i < repos.length; i++) {
         var repo = repos[i];
-        var repo_name = numOrgs > 1 ? repo.full_name : repo.name
+        var repoName = numOrgs > 1 ? repo.full_name : repo.name
         addRow([
-            '<a href="' + repo.html_url + '" target="_blank">' + repo_name + '</a>',
+            '<a href="' + repo.html_url + '" target="_blank">' + repoName + '</a>',
             repo.language,
             repo.stargazers_count,
             repo.forks_count,
