@@ -7,6 +7,8 @@ reposTable.appendChild(tbody);
 
 var tablesort;
 
+var numOrgs = 0;
+
 var searchInput = document.getElementById('search');
 var forkCheckbox = document.getElementById('include-forks');
 
@@ -30,7 +32,10 @@ var orgInput = document.getElementById('org'),
 orgForm.onsubmit = loadFromInput;
 
 function loadFromInput() {
-    loadOrganization(orgInput.value);
+    numOrgs = orgInput.value.split(',').length;
+    orgInput.value.split(',').forEach(function(org) {
+        loadOrganization(org.trim());
+    });
     return false;
 }
 
@@ -83,8 +88,9 @@ function addRepos(repos) {
 
     for (var i = 0; i < repos.length; i++) {
         var repo = repos[i];
+        var repoName = numOrgs > 1 ? repo.full_name : repo.name
         addRow([
-            '<a href="' + repo.html_url + '" target="_blank">' + repo.name + '</a>',
+            '<a href="' + repo.html_url + '" target="_blank">' + repoName + '</a>',
             repo.language,
             repo.stargazers_count,
             repo.forks_count,
