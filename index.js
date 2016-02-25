@@ -84,17 +84,58 @@ function getLinks(header) {
     return links;
 }
 
+function getIssues(url) {
+    var xhr = new XMLHttpRequest();
+    xhr.onload = onIssuesResponse;
+    xhr.open('get', url, true);
+    xhr.send();
+    xhr.responseType = 'json';
+}
+
+function onIssuesResponse(e) {
+
+    var xhr = e.target;
+    if (xhr.response.message === 'Not Found') {
+        document.body.className = '';
+        return;
+    }
+
+    getSupportIssueCount(xhr.response);
+
+    var links = getLinks(xhr.getResponseHeader('Link'));
+    if (links && links.next) getTags(links.next);
+
+    document.body.className = 'loaded';
+}
+
+function getSupportIssueCount(issues) {
+    var supportIssues = 0;
+    for (var i = 0; i < issues.length; i++) {
+        if (issues[i].labels) {
+            for (var j = 0; j < issues[i].labels.length; j++) {
+                if (issue[i].labels[j].name === 'support') supportIssues++;
+            }
+        }
+    }
+    return supportIssues;
+}
+
+
+
 function addRepos(repos) {
 
     for (var i = 0; i < repos.length; i++) {
         var repo = repos[i];
+        console.log(repo);
         var repoName = numOrgs > 1 ? repo.full_name : repo.name
+        var supportIssues = repo.open_issues_count > 0 ? getIssues(repo.issues_url.split('{')[0]) : 0
         addRow([
             '<a href="' + repo.html_url + '" target="_blank">' + repoName + '</a>',
             repo.language,
             repo.stargazers_count,
             repo.forks_count,
             repo.open_issues_count,
+            supportIssues,
             formatDate(repo.created_at),
             formatDate(repo.pushed_at),
             repo.description
