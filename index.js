@@ -103,7 +103,7 @@ function onIssuesResponse(e) {
     getSupportIssueCount(xhr.response);
 
     var links = getLinks(xhr.getResponseHeader('Link'));
-    if (links && links.next) getTags(links.next);
+    if (links && links.next) getIssues(links.next);
 
     document.body.className = 'loaded';
 }
@@ -113,7 +113,7 @@ function getSupportIssueCount(issues) {
     for (var i = 0; i < issues.length; i++) {
         if (issues[i].labels) {
             for (var j = 0; j < issues[i].labels.length; j++) {
-                if (issue[i].labels[j].name === 'support') supportIssues++;
+                if (issues[i].labels[j].name === 'support') supportIssues++;
             }
         }
     }
