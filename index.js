@@ -89,16 +89,12 @@ function addRepos(repos) {
     for (var i = 0; i < repos.length; i++) {
         var repo = repos[i];
         var repoName = numOrgs > 1 ? repo.full_name : repo.name
-        addRow([
-            '<a href="' + repo.html_url + '" target="_blank">' + repoName + '</a>',
-            repo.language,
-            repo.stargazers_count,
-            repo.forks_count,
-            repo.open_issues_count,
-            formatDate(repo.created_at),
-            formatDate(repo.pushed_at),
-            repo.description
-        ], repo);
+
+        var createdDate = formatDate(repo.created_at);
+        var pushedDate = formatDate(repo.pushed_at);
+
+        addRow(repoName, repo.html_url, repo.language, repo.stargazers_count, repo.forks_count, 
+            repo.open_issues_count, createdDate, pushedDate, repo.description, repo);
     }
 
     if (!tablesort) tablesort = new Tablesort(reposTable, {descending: true});
@@ -109,15 +105,39 @@ function formatDate(str) {
     return new Date(str).toDateString().substr(4);
 }
 
-function addRow(cells, repo) {
+function addRow(name, link, language, stars, forks, issues, created, pushed, description, repo) {
     var tr = document.createElement('tr');
     if (repo.fork) tr.dataset.fork = true;
-    for (var i = 0; i < cells.length; i++) {
-        var td = document.createElement('td');
-        td.innerHTML = cells[i];
-        tr.appendChild(td);
-    }
+
+    // Create link to repository via the DOM
+    var td = document.createElement('td');
+    var a = document.createElement('a');
+    a.setAttribute('href', link)
+    a.setAttribute('target', '_blank')
+    name = document.createTextNode(name);
+    a.appendChild(name);
+    td.appendChild(a);
+    tr.appendChild(td);
+
+    // create the other TDs in the table
+    createCell(language, tr);
+    createCell(stars, tr);
+    createCell(forks, tr);
+    createCell(issues, tr);
+    createCell(created, tr);
+    createCell(pushed, tr);
+    createCell(description, tr);
+
     tbody.appendChild(tr);
+}
+
+function createCell(content, row) {
+
+    var td = document.createElement('td');
+    content = document.createTextNode(content);
+    td.appendChild(content);
+    row.appendChild(td);
+
 }
 
 function debounce(fn, wait) {
